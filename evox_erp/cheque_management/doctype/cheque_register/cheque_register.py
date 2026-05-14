@@ -1,7 +1,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import cint, flt, today
+from frappe.utils import cint, cstr, flt, getdate, today
 
 from evox_erp.cheque_management.cheque_lifecycle import (
     DRAFT_STATUS,
@@ -21,6 +21,9 @@ IMMUTABLE_AFTER_SUBMIT = (
     "party_type",
     "party",
 )
+
+DATE_FIELDS = {"due_date"}
+FLOAT_FIELDS = {"amount"}
 
 
 class ChequeRegister(Document):
@@ -117,20 +120,15 @@ class ChequeRegister(Document):
             )
 
     def validate_after_submit_changes(self):
-        if self.docstatus != 1:
-            return
-
         previous = self.get_doc_before_save()
         if not previous:
             return
 
-        for fieldname in IMMUTABLE_AFTER_SUBMIT:
-            if fieldname == "amount":
-                changed = flt(previous.get(fieldname)) != flt(self.get(fieldname))
-            else:
-                changed = previous.get(fieldname) != self.get(fieldname)
+        if previous.docstatus != 1 or self.docstatus != 1:
+            return
 
-            if changed:
+        for fieldname in IMMUTABLE_AFTER_SUBMIT:
+            if has_immutable_field_changed(previous, self, fieldname):
                 frappe.throw(
                     _("{0} cannot be changed after the cheque is submitted.").format(
                         frappe.bold(self.meta.get_label(fieldname))
@@ -141,6 +139,21 @@ class ChequeRegister(Document):
             frappe.throw(
                 _("Cheque status is controlled by Cheque Movement records and cannot be edited manually.")
             )
+
+
+def has_immutable_field_changed(previous, current, fieldname):
+    previous_value = previous.get(fieldname)
+    current_value = current.get(fieldname)
+
+    if fieldname in DATE_FIELDS:
+        if not previous_value and not current_value:
+            return False
+        return getdate(previous_value) != getdate(current_value)
+
+    if fieldname in FLOAT_FIELDS:
+        return flt(previous_value) != flt(current_value)
+
+    return cstr(previous_value).strip() != cstr(current_value).strip()
 
 
 def is_strict_validation_enabled():
@@ -258,4 +271,3 @@ def cancel_cheque(cheque_name, posting_date=None, reason=None):
         posting_date=posting_date,
         reason=reason,
     )
-

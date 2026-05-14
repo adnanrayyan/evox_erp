@@ -11,6 +11,11 @@ Use these tests on `evox.localhost` after migration and build. They are written 
 5. Submit a cheque, then try to change the cheque number, bank name, company, currency, cheque type, due date, party type, or party. It should be blocked.
 6. With strict validation enabled, create an incoming cheque for a supplier. It should be blocked.
 7. With strict validation enabled, create an outgoing cheque for a customer. It should be blocked.
+8. Create a draft incoming cheque with due date entered through the UI date picker. Submit it without changing fields. The submit transition from `Draft` to `Received / In Hand` should be allowed.
+9. Submit a cheque, reload it, then try to change only `due_date`. It should be blocked.
+10. Submit a cheque, reload it, then try to change only `amount`. It should be blocked.
+11. Submit a cheque, reload it, then try to change only `cheque_number`. It should be blocked.
+12. Submit an outgoing cheque from `Draft`. The submit transition from `Draft` to `Issued` should be allowed.
 
 ## Incoming Lifecycle
 
@@ -44,4 +49,3 @@ Use these tests on `evox.localhost` after migration and build. They are written 
 3. Open `Returned Cheques` and confirm only `Returned` cheques are shown.
 4. Open `Cheques Due` and filter by due date range and status.
 5. Open `Cheques by Party` and filter by customer or supplier.
-
