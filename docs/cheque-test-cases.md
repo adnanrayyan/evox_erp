@@ -16,6 +16,10 @@ Use these tests on `evox.localhost` after migration and build. They are written 
 10. Submit a cheque, reload it, then try to change only `amount`. It should be blocked.
 11. Submit a cheque, reload it, then try to change only `cheque_number`. It should be blocked.
 12. Submit an outgoing cheque from `Draft`. The submit transition from `Draft` to `Issued` should be allowed.
+13. Try to type an invalid currency such as `USaw`. It should be rejected because currency is a Link to `Currency`.
+14. Create a same-currency cheque. Confirm `exchange_rate` becomes `1` and `base_amount` equals `amount`.
+15. Create a foreign-currency cheque. Confirm a positive `exchange_rate` is required and `base_amount = amount * exchange_rate`.
+16. Submit a cheque, create any movement, then try to change `amount` or `currency`. It should be blocked.
 
 ## Incoming Lifecycle
 
@@ -41,6 +45,11 @@ Use these tests on `evox.localhost` after migration and build. They are written 
 3. Create a movement with a different currency than the cheque. It should be blocked.
 4. Submit two movements in sequence, then try to cancel the older movement. It should be blocked.
 5. Cancel the latest movement. The cheque should restore to the movement's `from_status`.
+6. Select a cheque on a new Cheque Movement. Company, cheque number, party, bank, due date, amount, currency, status, and original exchange values should fetch automatically and stay read-only.
+7. For `Deposit to Bank`, `Mark as Cleared`, or `Mark as Returned`, leave Bank Account empty. Submission should be blocked.
+8. For `Endorse to Supplier`, leave Supplier empty. Submission should be blocked.
+9. For `Mark as Returned`, `Return to Customer`, or `Cancel`, leave Reason empty. Submission should be blocked.
+10. For a foreign-currency cheque, clear it with a movement exchange rate different from the original rate. Confirm movement base amount, exchange difference, and Gain/Loss/None are calculated.
 
 ## Reports
 

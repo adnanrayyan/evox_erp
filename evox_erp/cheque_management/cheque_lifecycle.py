@@ -16,6 +16,15 @@ FINAL_STATUSES = {
 
 INACTIVE_STATUSES = {"Cancelled", "Reversed"}
 
+MOVEMENT_TYPE_ALIASES = {
+    "Deposit": "Deposit to Bank",
+    "Clear": "Mark as Cleared",
+    "Collected": "Mark as Cleared",
+    "Return": "Mark as Returned",
+    "Bounce": "Mark as Returned",
+    "Cancel Cheque": "Cancel",
+}
+
 VALID_TRANSITIONS = {
     "Incoming": {
         ("Received / In Hand", "Deposit to Bank"): "Deposited / Under Collection",
@@ -34,6 +43,24 @@ VALID_TRANSITIONS = {
     },
 }
 
+BANK_MOVEMENT_TYPES = {
+    "Deposit to Bank",
+    "Mark as Cleared",
+    "Mark as Returned",
+}
+
+REASON_REQUIRED_MOVEMENT_TYPES = {
+    "Mark as Returned",
+    "Return to Customer",
+    "Cancel",
+}
+
+SUPPLIER_REQUIRED_MOVEMENT_TYPES = {"Endorse to Supplier"}
+
+EXCHANGE_DIFFERENCE_MOVEMENT_TYPES = {
+    "Mark as Cleared",
+}
+
 
 def get_initial_status(cheque_type):
     if cheque_type == "Incoming":
@@ -43,7 +70,12 @@ def get_initial_status(cheque_type):
     return DRAFT_STATUS
 
 
+def normalize_movement_type(movement_type):
+    return MOVEMENT_TYPE_ALIASES.get(movement_type, movement_type)
+
+
 def get_to_status(cheque_type, from_status, movement_type):
+    movement_type = normalize_movement_type(movement_type)
     transition_map = VALID_TRANSITIONS.get(cheque_type) or {}
     to_status = transition_map.get((from_status, movement_type))
     if not to_status:
@@ -60,3 +92,18 @@ def get_to_status(cheque_type, from_status, movement_type):
 def is_inactive_status(status):
     return status in INACTIVE_STATUSES
 
+
+def is_bank_movement(movement_type):
+    return normalize_movement_type(movement_type) in BANK_MOVEMENT_TYPES
+
+
+def requires_reason(movement_type):
+    return normalize_movement_type(movement_type) in REASON_REQUIRED_MOVEMENT_TYPES
+
+
+def requires_supplier(movement_type):
+    return normalize_movement_type(movement_type) in SUPPLIER_REQUIRED_MOVEMENT_TYPES
+
+
+def calculates_exchange_difference(movement_type):
+    return normalize_movement_type(movement_type) in EXCHANGE_DIFFERENCE_MOVEMENT_TYPES

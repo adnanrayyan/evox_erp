@@ -16,6 +16,9 @@
   "due_date",
   "currency",
   "amount",
+  "company_currency",
+  "exchange_rate",
+  "base_amount",
   "current_status",
   "party_section",
   "party_type",
@@ -102,6 +105,26 @@
    "label": "Amount",
    "options": "currency",
    "reqd": 1
+  },
+  {
+   "fieldname": "company_currency",
+   "fieldtype": "Link",
+   "label": "Company Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate"
+  },
+  {
+   "fieldname": "base_amount",
+   "fieldtype": "Currency",
+   "label": "Base Amount",
+   "options": "company_currency",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,

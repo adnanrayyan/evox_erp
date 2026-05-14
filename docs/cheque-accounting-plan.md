@@ -59,7 +59,9 @@ Cr Bank Account
 
 - Journal Entry creation should start as draft-only until reviewed.
 - Cheque Settings stores the account defaults, but the fields are intentionally not mandatory yet.
+- Cheque Register stores original cheque currency, company currency, exchange rate, and base amount at cheque creation time.
+- Cheque Movement stores movement exchange rate, movement base amount, and exchange difference for future accounting-impact movements.
+- Phase 1 calculates exchange difference for clear/collection movements only; it does not post exchange gain or loss Journal Entries.
 - Cancellation and reversal behavior must be tested against submitted Journal Entries before any automatic posting is enabled.
 - Bank charges should be handled explicitly and should not be inferred from a cheque movement amount.
 - The movement amount must always equal the cheque amount; partial clearing or partial endorsement is out of scope for Phase 1.
-

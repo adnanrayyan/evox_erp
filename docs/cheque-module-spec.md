@@ -26,7 +26,10 @@ Submittable DocType:
 - party_type: Customer / Supplier
 - party
 - amount
-- currency
+- currency: Link to Currency
+- company_currency
+- exchange_rate
+- base_amount
 - bank_name
 - bank_branch
 - due_date
@@ -46,6 +49,15 @@ Submittable DocType:
 - to_status
 - posting_date
 - amount
+- currency
+- company_currency
+- original_exchange_rate
+- original_base_amount
+- movement_exchange_rate
+- movement_base_amount
+- exchange_difference
+- exchange_difference_type
+- party and bank snapshot fields
 - journal_entry
 - notes
 
@@ -119,6 +131,11 @@ Cr Bank Account
 - Cheque type is required.
 - Party is required.
 - Cannot change cheque amount after submit.
+- Cannot change cheque amount, currency, company currency, exchange rate, or base amount after submit.
+- Cannot change cheque amount or currency after any Cheque Movement exists.
+- Movement company, amount, currency, party, bank, due date, status, and original exchange values are fetched from the selected cheque and are not user-entered movement values.
+- Same-currency cheques use exchange rate `1`; foreign-currency cheques require a positive exchange rate.
+- Clearing a foreign-currency cheque calculates movement base amount and exchange gain/loss for future accounting integration.
 - Cannot deposit a cheque already endorsed to supplier.
 - Cannot endorse a cheque already deposited to bank.
 - Cannot clear a cheque unless it is deposited.
@@ -145,4 +162,3 @@ Cr Bank Account
 - cancel_cheque
 
 Do not add automatic Journal Entry posting until workflows, permissions, and tests are in place.
-

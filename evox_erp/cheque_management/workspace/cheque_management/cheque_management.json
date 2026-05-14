@@ -1,4 +1,5 @@
 {
+ "app": "evox_erp",
  "charts": [],
  "content": "[{\"id\":\"cheque-shortcuts\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Cheque Management</span>\",\"col\":12}},{\"id\":\"cheque-register\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Register\",\"col\":3}},{\"id\":\"cheque-movement\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Movement\",\"col\":3}},{\"id\":\"cheque-settings\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Settings\",\"col\":3}},{\"id\":\"cheque-reports\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Reports</span>\",\"col\":12}},{\"id\":\"cheques-in-hand\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheques In Hand\",\"col\":3}},{\"id\":\"cheques-under-collection\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheques Under Collection\",\"col\":3}},{\"id\":\"returned-cheques\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Returned Cheques\",\"col\":3}}]",
  "creation": "2026-05-14 00:00:00.000000",

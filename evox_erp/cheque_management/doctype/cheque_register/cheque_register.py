@@ -18,21 +18,30 @@ IMMUTABLE_AFTER_SUBMIT = (
     "due_date",
     "currency",
     "amount",
+    "company_currency",
+    "exchange_rate",
+    "base_amount",
     "party_type",
     "party",
 )
 
 DATE_FIELDS = {"due_date"}
-FLOAT_FIELDS = {"amount"}
+FLOAT_FIELDS = {"amount", "exchange_rate", "base_amount"}
+EXCHANGE_FIELDS = {"company_currency", "exchange_rate", "base_amount"}
 
 
 class ChequeRegister(Document):
     def validate(self):
         self.set_default_status()
+        self.set_company_currency()
         self.validate_required_values()
+        self.validate_currency_links()
         self.validate_positive_amount()
+        self.validate_exchange_rate()
+        self.calculate_base_amount()
         self.validate_expected_party_type()
         self.validate_duplicate_active_cheque()
+        self.validate_amount_currency_not_used_in_movement()
         self.validate_after_submit_changes()
 
     def before_submit(self):
@@ -60,6 +69,7 @@ class ChequeRegister(Document):
             "due_date",
             "currency",
             "amount",
+            "company_currency",
             "party_type",
             "party",
         )
@@ -72,6 +82,45 @@ class ChequeRegister(Document):
     def validate_positive_amount(self):
         if flt(self.amount) <= 0:
             frappe.throw(_("Cheque amount must be greater than zero."))
+
+    def set_company_currency(self):
+        if self.company and (self.docstatus == 0 or not self.company_currency):
+            self.company_currency = frappe.db.get_value(
+                "Company", self.company, "default_currency"
+            )
+
+        if not self.currency:
+            self.currency = frappe.db.get_single_value("Cheque Settings", "default_currency")
+
+    def validate_currency_links(self):
+        for fieldname in ("currency", "company_currency"):
+            currency = self.get(fieldname)
+            if currency and not frappe.db.exists("Currency", currency):
+                frappe.throw(
+                    _("{0} must be an existing Currency.").format(
+                        frappe.bold(self.meta.get_label(fieldname))
+                    )
+                )
+
+    def validate_exchange_rate(self):
+        if not (self.currency and self.company_currency):
+            return
+
+        if self.currency == self.company_currency:
+            self.exchange_rate = 1
+            return
+
+        if flt(self.exchange_rate) <= 0:
+            frappe.throw(
+                _("Exchange Rate is required when cheque currency differs from company currency.")
+            )
+
+    def calculate_base_amount(self):
+        if not self.amount:
+            return
+
+        exchange_rate = flt(self.exchange_rate) or 1
+        self.base_amount = flt(self.amount) * exchange_rate
 
     def validate_expected_party_type(self):
         expected_party_type = None
@@ -119,6 +168,31 @@ class ChequeRegister(Document):
                 )
             )
 
+    def validate_amount_currency_not_used_in_movement(self):
+        previous = self.get_doc_before_save()
+        if not previous or not self.name:
+            return
+
+        if not frappe.db.exists(
+            "Cheque Movement", {"cheque": self.name, "docstatus": ["<", 2]}
+        ):
+            return
+
+        for fieldname in ("amount", "currency", "company_currency", "exchange_rate", "base_amount"):
+            if (
+                fieldname in EXCHANGE_FIELDS
+                and not previous.get(fieldname)
+                and self.get(fieldname)
+            ):
+                continue
+
+            if has_immutable_field_changed(previous, self, fieldname):
+                frappe.throw(
+                    _("{0} cannot be changed after the cheque has movements.").format(
+                        frappe.bold(self.meta.get_label(fieldname))
+                    )
+                )
+
     def validate_after_submit_changes(self):
         previous = self.get_doc_before_save()
         if not previous:
@@ -128,6 +202,13 @@ class ChequeRegister(Document):
             return
 
         for fieldname in IMMUTABLE_AFTER_SUBMIT:
+            if (
+                fieldname in EXCHANGE_FIELDS
+                and not previous.get(fieldname)
+                and self.get(fieldname)
+            ):
+                continue
+
             if has_immutable_field_changed(previous, self, fieldname):
                 frappe.throw(
                     _("{0} cannot be changed after the cheque is submitted.").format(
@@ -182,6 +263,7 @@ def _create_movement(
     bank_account=None,
     supplier=None,
     reason=None,
+    movement_exchange_rate=None,
     notes=None,
 ):
     cheque = _get_cheque_for_action(cheque_name)
@@ -194,6 +276,10 @@ def _create_movement(
             "posting_date": posting_date or today(),
             "amount": cheque.amount,
             "currency": cheque.currency,
+            "company_currency": cheque.company_currency,
+            "original_exchange_rate": cheque.exchange_rate,
+            "original_base_amount": cheque.base_amount,
+            "movement_exchange_rate": movement_exchange_rate or cheque.exchange_rate,
             "party_type": cheque.party_type,
             "party": cheque.party,
             "bank_account": bank_account,
@@ -221,20 +307,23 @@ def deposit_to_bank(cheque_name, bank_account=None, posting_date=None, notes=Non
 
 
 @frappe.whitelist()
-def mark_as_cleared(cheque_name, posting_date=None, notes=None):
+def mark_as_cleared(cheque_name, bank_account=None, posting_date=None, movement_exchange_rate=None, notes=None):
     return _create_movement(
         cheque_name,
         "Mark as Cleared",
+        bank_account=bank_account,
         posting_date=posting_date,
+        movement_exchange_rate=movement_exchange_rate,
         notes=notes,
     )
 
 
 @frappe.whitelist()
-def mark_as_returned(cheque_name, posting_date=None, reason=None, notes=None):
+def mark_as_returned(cheque_name, bank_account=None, posting_date=None, reason=None, notes=None):
     return _create_movement(
         cheque_name,
         "Mark as Returned",
+        bank_account=bank_account,
         posting_date=posting_date,
         reason=reason,
         notes=notes,

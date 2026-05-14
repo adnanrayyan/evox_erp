@@ -14,11 +14,25 @@
   "from_status",
   "to_status",
   "posting_date",
+  "cheque_summary_section",
+  "cheque_number",
+  "current_status",
+  "bank_name",
+  "bank_branch",
+  "due_date",
   "amount",
   "currency",
   "party_section",
   "party_type",
   "party",
+  "exchange_section",
+  "company_currency",
+  "original_exchange_rate",
+  "original_base_amount",
+  "movement_exchange_rate",
+  "movement_base_amount",
+  "exchange_difference",
+  "exchange_difference_type",
   "details_section",
   "bank_account",
   "supplier",
@@ -38,6 +52,7 @@
    "in_list_view": 1,
    "label": "Company",
    "options": "Company",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -54,7 +69,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Movement Type",
-   "options": "Receive\nDeposit to Bank\nMark as Cleared\nMark as Returned\nReturn to Customer\nEndorse to Supplier\nCancel\nReverse",
+   "options": "Receive\nDeposit to Bank\nDeposit\nMark as Cleared\nClear\nCollected\nMark as Returned\nReturn\nReturn to Customer\nEndorse to Supplier\nCancel\nCancel Cheque\nReverse",
    "reqd": 1
   },
   {
@@ -79,11 +94,47 @@
    "reqd": 1
   },
   {
+   "fieldname": "cheque_summary_section",
+   "fieldtype": "Section Break",
+   "label": "Cheque Summary"
+  },
+  {
+   "fieldname": "cheque_number",
+   "fieldtype": "Data",
+   "label": "Cheque No",
+   "read_only": 1
+  },
+  {
+   "fieldname": "current_status",
+   "fieldtype": "Data",
+   "label": "Current Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "label": "Bank",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bank_branch",
+   "fieldtype": "Data",
+   "label": "Bank Branch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Due Date",
+   "read_only": 1
+  },
+  {
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Amount",
    "options": "currency",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -91,6 +142,7 @@
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -112,26 +164,83 @@
    "read_only": 1
   },
   {
-   "fieldname": "details_section",
+   "fieldname": "exchange_section",
    "fieldtype": "Section Break",
-   "label": "Details"
+   "label": "Exchange"
   },
   {
+   "fieldname": "company_currency",
+   "fieldtype": "Link",
+   "label": "Company Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_exchange_rate",
+   "fieldtype": "Float",
+   "label": "Original Exchange Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_base_amount",
+   "fieldtype": "Currency",
+   "label": "Original Base Amount",
+   "options": "company_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "movement_exchange_rate",
+   "fieldtype": "Float",
+   "label": "Movement Exchange Rate"
+  },
+  {
+   "fieldname": "movement_base_amount",
+   "fieldtype": "Currency",
+   "label": "Movement Base Amount",
+   "options": "company_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "exchange_difference",
+   "fieldtype": "Currency",
+   "label": "Exchange Difference",
+   "options": "company_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "exchange_difference_type",
+   "fieldtype": "Select",
+   "label": "Exchange Difference Type",
+   "options": "None\nGain\nLoss",
+   "read_only": 1
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Movement Details"
+  },
+  {
+   "depends_on": "eval:['Deposit to Bank','Deposit','Mark as Cleared','Clear','Collected','Mark as Returned','Return'].includes(doc.movement_type)",
    "fieldname": "bank_account",
    "fieldtype": "Link",
    "label": "Bank Account",
+   "mandatory_depends_on": "eval:['Deposit to Bank','Deposit','Mark as Cleared','Clear','Collected','Mark as Returned','Return'].includes(doc.movement_type)",
    "options": "Account"
   },
   {
+   "depends_on": "eval:doc.movement_type=='Endorse to Supplier'",
    "fieldname": "supplier",
    "fieldtype": "Link",
    "label": "Supplier",
+   "mandatory_depends_on": "eval:doc.movement_type=='Endorse to Supplier'",
    "options": "Supplier"
   },
   {
+   "depends_on": "eval:['Mark as Returned','Return','Return to Customer','Cancel','Cancel Cheque'].includes(doc.movement_type)",
    "fieldname": "reason",
    "fieldtype": "Small Text",
-   "label": "Reason"
+   "label": "Reason",
+   "mandatory_depends_on": "eval:['Mark as Returned','Return','Return to Customer','Cancel','Cancel Cheque'].includes(doc.movement_type)"
   },
   {
    "fieldname": "journal_entry",
@@ -192,7 +301,7 @@
    "write": 1
   }
  ],
- "search_fields": "cheque,movement_type,from_status,to_status",
+ "search_fields": "cheque,cheque_number,movement_type,from_status,to_status",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
