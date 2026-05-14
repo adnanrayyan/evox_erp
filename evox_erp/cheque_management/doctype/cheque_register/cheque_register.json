@@ -1,0 +1,297 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "CHQ-.YYYY.-.#####",
+ "creation": "2026-05-14 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "basic_info_section",
+  "company",
+  "cheque_type",
+  "cheque_number",
+  "bank_name",
+  "bank_branch",
+  "due_date",
+  "currency",
+  "amount",
+  "current_status",
+  "party_section",
+  "party_type",
+  "party",
+  "links_section",
+  "linked_sales_invoice",
+  "linked_purchase_invoice",
+  "linked_payment_entry",
+  "linked_journal_entry",
+  "location_tracking_section",
+  "physical_location",
+  "deposit_bank_account",
+  "deposit_date",
+  "clearance_date",
+  "return_date",
+  "return_reason",
+  "endorsed_to_supplier",
+  "endorsed_date",
+  "attachments_notes_section",
+  "cheque_image",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "basic_info_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Info"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cheque_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Cheque Type",
+   "options": "Incoming\nOutgoing",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cheque_number",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Cheque Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Bank Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank_branch",
+   "fieldtype": "Data",
+   "label": "Bank Branch"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Due Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "currency",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Draft",
+   "fieldname": "current_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Current Status",
+   "options": "Draft\nReceived / In Hand\nDeposited / Under Collection\nCleared\nReturned\nReturned to Customer\nEndorsed to Supplier\nIssued\nCancelled\nReversed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "party_section",
+   "fieldtype": "Section Break",
+   "label": "Party"
+  },
+  {
+   "fieldname": "party_type",
+   "fieldtype": "Select",
+   "label": "Party Type",
+   "options": "Customer\nSupplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "in_global_search": 1,
+   "label": "Party",
+   "options": "party_type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "links_section",
+   "fieldtype": "Section Break",
+   "label": "Links"
+  },
+  {
+   "fieldname": "linked_sales_invoice",
+   "fieldtype": "Link",
+   "label": "Linked Sales Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "linked_purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Linked Purchase Invoice",
+   "options": "Purchase Invoice"
+  },
+  {
+   "fieldname": "linked_payment_entry",
+   "fieldtype": "Link",
+   "label": "Linked Payment Entry",
+   "options": "Payment Entry"
+  },
+  {
+   "fieldname": "linked_journal_entry",
+   "fieldtype": "Link",
+   "label": "Linked Journal Entry",
+   "options": "Journal Entry"
+  },
+  {
+   "fieldname": "location_tracking_section",
+   "fieldtype": "Section Break",
+   "label": "Location / Tracking"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "physical_location",
+   "fieldtype": "Data",
+   "label": "Physical Location"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "deposit_bank_account",
+   "fieldtype": "Link",
+   "label": "Deposit Bank Account",
+   "options": "Account",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "deposit_date",
+   "fieldtype": "Date",
+   "label": "Deposit Date",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "clearance_date",
+   "fieldtype": "Date",
+   "label": "Clearance Date",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "return_date",
+   "fieldtype": "Date",
+   "label": "Return Date",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "return_reason",
+   "fieldtype": "Small Text",
+   "label": "Return Reason",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "endorsed_to_supplier",
+   "fieldtype": "Link",
+   "label": "Endorsed To Supplier",
+   "options": "Supplier",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "endorsed_date",
+   "fieldtype": "Date",
+   "label": "Endorsed Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "attachments_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Attachments / Notes"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "cheque_image",
+   "fieldtype": "Attach Image",
+   "label": "Cheque Image"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-05-14 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Cheque Management",
+ "name": "Cheque Register",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "cheque_number,bank_name,party,current_status",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "cheque_number",
+ "track_changes": 1
+}

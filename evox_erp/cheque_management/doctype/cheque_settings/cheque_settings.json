@@ -1,0 +1,124 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-05-14 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "default_currency",
+  "accounts_section",
+  "cheques_receivable_in_hand_account",
+  "cheques_under_collection_account",
+  "returned_cheques_receivable_account",
+  "post_dated_cheques_payable_account",
+  "bank_charges_account",
+  "default_bank_account",
+  "validation_section",
+  "enable_strict_validation",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "default_currency",
+   "fieldtype": "Link",
+   "label": "Default Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "accounts_section",
+   "fieldtype": "Section Break",
+   "label": "Accounts"
+  },
+  {
+   "fieldname": "cheques_receivable_in_hand_account",
+   "fieldtype": "Link",
+   "label": "Cheques Receivable In Hand Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "cheques_under_collection_account",
+   "fieldtype": "Link",
+   "label": "Cheques Under Collection Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "returned_cheques_receivable_account",
+   "fieldtype": "Link",
+   "label": "Returned Cheques Receivable Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "post_dated_cheques_payable_account",
+   "fieldtype": "Link",
+   "label": "Post Dated Cheques Payable Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "bank_charges_account",
+   "fieldtype": "Link",
+   "label": "Bank Charges Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "default_bank_account",
+   "fieldtype": "Link",
+   "label": "Default Bank Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "validation_section",
+   "fieldtype": "Section Break",
+   "label": "Validation"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_strict_validation",
+   "fieldtype": "Check",
+   "label": "Enable Strict Validation"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-14 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Cheque Management",
+ "name": "Cheque Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
