@@ -6,19 +6,11 @@
 
 ## Current Status
 
-هذا المستودع لا يحتوي بعد على Frappe app generated. على هذا الجهاز أمر `bench` غير متوفر من الـ host، لذلك لم يتم إنشاء ملفات app يدوياً حتى لا ننشئ structure غير صحيح.
+This repository now contains a minimal valid Frappe app package named `evox_erp`.
 
-أنشئ app الحقيقي من داخل development bench أو Frappe Docker devcontainer:
-
-```bash
-bench new-app evox_erp
-```
-
-ثم ادفع الملفات الناتجة إلى هذا المستودع.
+It is intentionally small: it provides app metadata, hooks, module registration, and documentation. Business DocTypes such as Cheque Register should be created through Frappe/Bench migrations in the next implementation phase.
 
 ## Install on ERPNext Site
-
-بعد أن يصبح app موجوداً كـ Frappe app صحيح:
 
 ```bash
 bench get-app https://github.com/adnanrayyan/evox_erp.git

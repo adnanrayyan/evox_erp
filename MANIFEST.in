@@ -1,0 +1,8 @@
+include README.md
+recursive-include evox_erp *.json
+recursive-include evox_erp *.py
+recursive-include evox_erp *.js
+recursive-include evox_erp *.css
+recursive-include evox_erp *.html
+recursive-include evox_erp *.txt
+
