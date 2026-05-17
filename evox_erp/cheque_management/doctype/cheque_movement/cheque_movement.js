@@ -1,3 +1,13 @@
+// Canonical movement types that require a bank account.
+const BANK_MOVEMENTS = new Set(["Deposit to Bank", "Mark as Cleared", "Mark as Returned"]);
+
+// Canonical movement types that require a reason field.
+const REASON_MOVEMENTS = new Set(["Mark as Returned", "Cancel"]);
+
+// Movement types where the user enters a settlement exchange rate and
+// the system calculates an exchange gain / loss vs the original base amount.
+const EXCHANGE_MOVEMENTS = new Set(["Mark as Cleared", "Endorse to Supplier"]);
+
 frappe.ui.form.on("Cheque Movement", {
 	setup(frm) {
 		frm.set_query("cheque", () => ({
@@ -14,7 +24,7 @@ frappe.ui.form.on("Cheque Movement", {
 	},
 
 	refresh(frm) {
-		set_read_only_snapshot_fields(frm);
+		lock_snapshot_fields(frm);
 		apply_movement_type_ui(frm);
 		calculate_exchange_values(frm);
 	},
@@ -24,8 +34,11 @@ frappe.ui.form.on("Cheque Movement", {
 	},
 
 	movement_type(frm) {
+		// Re-evaluate visible / required fields for the new movement type.
 		apply_movement_type_ui(frm);
-		fetch_cheque_details(frm);
+		// Always reset the movement exchange rate when the type changes so
+		// no stale value from a previous selection bleeds through.
+		reset_exchange_on_type_change(frm);
 	},
 
 	movement_exchange_rate(frm) {
@@ -33,7 +46,11 @@ frappe.ui.form.on("Cheque Movement", {
 	},
 });
 
-function set_read_only_snapshot_fields(frm) {
+// ---------------------------------------------------------------------------
+// Field locking
+// ---------------------------------------------------------------------------
+
+function lock_snapshot_fields(frm) {
 	[
 		"company",
 		"cheque_number",
@@ -51,36 +68,66 @@ function set_read_only_snapshot_fields(frm) {
 		"movement_base_amount",
 		"exchange_difference",
 		"exchange_difference_type",
-	].forEach((fieldname) => frm.set_df_property(fieldname, "read_only", 1));
+	].forEach((f) => frm.set_df_property(f, "read_only", 1));
 }
+
+// ---------------------------------------------------------------------------
+// UI rules per movement type
+// ---------------------------------------------------------------------------
 
 function apply_movement_type_ui(frm) {
-	const movementType = frm.doc.movement_type;
-	const bankMovements = [
-		"Deposit to Bank",
-		"Deposit",
-		"Mark as Cleared",
-		"Clear",
-		"Collected",
-		"Mark as Returned",
-		"Return",
-	];
-	const reasonMovements = ["Mark as Returned", "Return", "Return to Customer", "Cancel", "Cancel Cheque"];
-	const supplierMovement = movementType === "Endorse to Supplier";
-	const bankMovement = bankMovements.includes(movementType);
-	const reasonMovement = reasonMovements.includes(movementType);
-	const exchangeMovement = ["Mark as Cleared", "Clear", "Collected"].includes(movementType);
-	const isSameCurrency = frm.doc.currency && frm.doc.company_currency && frm.doc.currency === frm.doc.company_currency;
+	const mt = frm.doc.movement_type;
+	const isSameCurrency = is_same_currency(frm);
+	const isExchangeMovement = EXCHANGE_MOVEMENTS.has(mt);
+	const isBankMovement = BANK_MOVEMENTS.has(mt);
+	const isReasonMovement = REASON_MOVEMENTS.has(mt);
+	const isSupplierMovement = mt === "Endorse to Supplier";
 
-	frm.toggle_display("bank_account", bankMovement);
-	frm.toggle_reqd("bank_account", bankMovement);
-	frm.toggle_display("supplier", supplierMovement);
-	frm.toggle_reqd("supplier", supplierMovement);
-	frm.toggle_display("reason", reasonMovement);
-	frm.toggle_reqd("reason", reasonMovement);
-	frm.set_df_property("movement_exchange_rate", "read_only", !exchangeMovement || isSameCurrency);
-	frm.toggle_reqd("movement_exchange_rate", exchangeMovement && !isSameCurrency);
+	frm.toggle_display("bank_account", isBankMovement);
+	frm.toggle_reqd("bank_account", isBankMovement);
+
+	frm.toggle_display("supplier", isSupplierMovement);
+	frm.toggle_reqd("supplier", isSupplierMovement);
+
+	frm.toggle_display("reason", isReasonMovement);
+	frm.toggle_reqd("reason", isReasonMovement);
+
+	// Exchange rate is editable only for foreign-currency cheques on movement
+	// types that have accounting settlement impact (Mark as Cleared, Endorse).
+	const rateEditable = isExchangeMovement && !isSameCurrency;
+	frm.set_df_property("movement_exchange_rate", "read_only", !rateEditable);
+	frm.toggle_reqd("movement_exchange_rate", rateEditable);
 }
+
+// ---------------------------------------------------------------------------
+// Exchange rate reset on movement type change
+// ---------------------------------------------------------------------------
+
+function reset_exchange_on_type_change(frm) {
+	// Determine the appropriate default rate for the newly selected type.
+	const isSameCurrency = is_same_currency(frm);
+	const isExchangeMovement = EXCHANGE_MOVEMENTS.has(frm.doc.movement_type);
+
+	if (isSameCurrency) {
+		// Same-currency cheques never have an exchange rate other than 1.
+		frm.set_value("movement_exchange_rate", 1);
+	} else if (isExchangeMovement) {
+		// For exchange-impacting movements with foreign currency, default to
+		// the original rate so the user can adjust from a sensible baseline.
+		frm.set_value("movement_exchange_rate", flt(frm.doc.original_exchange_rate) || 1);
+	} else {
+		// Non-exchange movements (Deposit, Cancel, Receive) carry the original
+		// rate for reference but it has no accounting impact.
+		frm.set_value("movement_exchange_rate", flt(frm.doc.original_exchange_rate) || 1);
+	}
+
+	// Always recalculate so exchange_difference resets to 0 for non-exchange types.
+	calculate_exchange_values(frm);
+}
+
+// ---------------------------------------------------------------------------
+// Fetch cheque details from server
+// ---------------------------------------------------------------------------
 
 function fetch_cheque_details(frm) {
 	if (!frm.doc.cheque) {
@@ -89,34 +136,33 @@ function fetch_cheque_details(frm) {
 
 	frappe.call({
 		method: "evox_erp.cheque_management.doctype.cheque_movement.cheque_movement.get_cheque_details",
-		args: {
-			cheque: frm.doc.cheque,
-		},
+		args: { cheque: frm.doc.cheque },
 		callback(response) {
-			const details = response.message;
-			if (!details) {
+			const d = response.message;
+			if (!d) {
 				return;
 			}
 
 			frm.set_value({
-				company: details.company,
-				cheque_number: details.cheque_number,
-				amount: details.amount,
-				currency: details.currency,
-				company_currency: details.company_currency,
-				bank_name: details.bank_name,
-				bank_branch: details.bank_branch,
-				due_date: details.due_date,
-				current_status: details.current_status,
-				party_type: details.party_type,
-				party: details.party,
-				original_exchange_rate: details.exchange_rate,
-				original_base_amount: details.base_amount,
-				movement_exchange_rate: frm.doc.movement_exchange_rate || details.exchange_rate,
+				company: d.company,
+				cheque_number: d.cheque_number,
+				amount: d.amount,
+				currency: d.currency,
+				company_currency: d.company_currency,
+				bank_name: d.bank_name,
+				bank_branch: d.bank_branch,
+				due_date: d.due_date,
+				current_status: d.current_status,
+				party_type: d.party_type,
+				party: d.party,
+				original_exchange_rate: d.exchange_rate,
+				original_base_amount: d.base_amount,
+				// Always reset to original rate when a new cheque is selected.
+				movement_exchange_rate: d.exchange_rate,
 			});
 
-			if (!frm.doc.bank_account && details.deposit_bank_account) {
-				frm.set_value("bank_account", details.deposit_bank_account);
+			if (!frm.doc.bank_account && d.deposit_bank_account) {
+				frm.set_value("bank_account", d.deposit_bank_account);
 			}
 
 			apply_movement_type_ui(frm);
@@ -125,27 +171,48 @@ function fetch_cheque_details(frm) {
 	});
 }
 
+// ---------------------------------------------------------------------------
+// Exchange value calculation (client-side live update)
+// ---------------------------------------------------------------------------
+
 function calculate_exchange_values(frm) {
 	const amount = flt(frm.doc.amount);
 	const originalBase = flt(frm.doc.original_base_amount);
-	let rate = flt(frm.doc.movement_exchange_rate) || flt(frm.doc.original_exchange_rate) || 1;
-	const isSameCurrency = frm.doc.currency && frm.doc.company_currency && frm.doc.currency === frm.doc.company_currency;
-	const exchangeMovement = ["Mark as Cleared", "Clear", "Collected"].includes(frm.doc.movement_type);
+	const isSameCurrency = is_same_currency(frm);
+	const isExchangeMovement = EXCHANGE_MOVEMENTS.has(frm.doc.movement_type);
 
-	if (isSameCurrency) {
-		rate = 1;
-		if (flt(frm.doc.movement_exchange_rate) !== 1) {
-			frm.set_value("movement_exchange_rate", 1);
-		}
+	const rate = isSameCurrency ? 1 : flt(frm.doc.movement_exchange_rate) || flt(frm.doc.original_exchange_rate) || 1;
+
+	if (isSameCurrency && flt(frm.doc.movement_exchange_rate) !== 1) {
+		frm.set_value("movement_exchange_rate", 1);
 	}
 
 	const movementBase = amount * rate;
 	let difference = 0;
-	if (!isSameCurrency && exchangeMovement) {
+	let differenceType = "None";
+
+	if (!isSameCurrency && isExchangeMovement) {
 		difference = movementBase - originalBase;
+		if (difference > 0) {
+			differenceType = "Gain";
+		} else if (difference < 0) {
+			differenceType = "Loss";
+		}
 	}
 
 	frm.set_value("movement_base_amount", movementBase);
 	frm.set_value("exchange_difference", difference);
-	frm.set_value("exchange_difference_type", difference > 0 ? "Gain" : difference < 0 ? "Loss" : "None");
+	frm.set_value("exchange_difference_type", differenceType);
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function is_same_currency(frm) {
+	return (
+		frm.doc.currency &&
+		frm.doc.company_currency &&
+		frm.doc.currency === frm.doc.company_currency
+	);
 }

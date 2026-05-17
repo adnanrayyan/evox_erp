@@ -8,10 +8,12 @@ OUTGOING_INITIAL_STATUS = "Issued"
 
 FINAL_STATUSES = {
     "Cleared",
-    "Returned to Customer",
+    "Returned",
     "Endorsed to Supplier",
     "Cancelled",
     "Reversed",
+    # legacy status kept so existing records display without error
+    "Returned to Customer",
 }
 
 INACTIVE_STATUSES = {"Cancelled", "Reversed"}
@@ -22,6 +24,8 @@ MOVEMENT_TYPE_ALIASES = {
     "Collected": "Mark as Cleared",
     "Return": "Mark as Returned",
     "Bounce": "Mark as Returned",
+    # "Return to Customer" was a legacy movement type; normalise to Mark as Returned
+    "Return to Customer": "Mark as Returned",
     "Cancel Cheque": "Cancel",
 }
 
@@ -29,16 +33,19 @@ VALID_TRANSITIONS = {
     "Incoming": {
         ("Received / In Hand", "Deposit to Bank"): "Deposited / Under Collection",
         ("Received / In Hand", "Endorse to Supplier"): "Endorsed to Supplier",
-        ("Received / In Hand", "Return to Customer"): "Returned to Customer",
+        # Allow direct return from hand (cheque never deposited, e.g. customer recall)
+        ("Received / In Hand", "Mark as Returned"): "Returned",
         ("Received / In Hand", "Cancel"): "Cancelled",
         ("Deposited / Under Collection", "Mark as Cleared"): "Cleared",
         ("Deposited / Under Collection", "Mark as Returned"): "Returned",
-        ("Returned", "Return to Customer"): "Returned to Customer",
+        # Allow cancellation while cheque is still under collection
+        ("Deposited / Under Collection", "Cancel"): "Cancelled",
         ("Returned", "Cancel"): "Cancelled",
     },
     "Outgoing": {
         ("Issued", "Mark as Cleared"): "Cleared",
         ("Issued", "Cancel"): "Cancelled",
+        # kept for backward compatibility with any existing outgoing records
         ("Issued", "Reverse"): "Reversed",
     },
 }
@@ -51,14 +58,16 @@ BANK_MOVEMENT_TYPES = {
 
 REASON_REQUIRED_MOVEMENT_TYPES = {
     "Mark as Returned",
-    "Return to Customer",
     "Cancel",
 }
 
 SUPPLIER_REQUIRED_MOVEMENT_TYPES = {"Endorse to Supplier"}
 
+# Movement types where a settlement exchange rate is entered by the user
+# and an exchange gain / loss is calculated against the original base amount.
 EXCHANGE_DIFFERENCE_MOVEMENT_TYPES = {
     "Mark as Cleared",
+    "Endorse to Supplier",
 }
 
 

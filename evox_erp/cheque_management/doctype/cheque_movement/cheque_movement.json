@@ -69,7 +69,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Movement Type",
-   "options": "Receive\nDeposit to Bank\nDeposit\nMark as Cleared\nClear\nCollected\nMark as Returned\nReturn\nReturn to Customer\nEndorse to Supplier\nCancel\nCancel Cheque\nReverse",
+   "options": "Deposit to Bank\nMark as Cleared\nMark as Returned\nEndorse to Supplier\nCancel",
    "reqd": 1
   },
   {
@@ -220,11 +220,11 @@
    "label": "Movement Details"
   },
   {
-   "depends_on": "eval:['Deposit to Bank','Deposit','Mark as Cleared','Clear','Collected','Mark as Returned','Return'].includes(doc.movement_type)",
+   "depends_on": "eval:['Deposit to Bank','Mark as Cleared','Mark as Returned'].includes(doc.movement_type)",
    "fieldname": "bank_account",
    "fieldtype": "Link",
    "label": "Bank Account",
-   "mandatory_depends_on": "eval:['Deposit to Bank','Deposit','Mark as Cleared','Clear','Collected','Mark as Returned','Return'].includes(doc.movement_type)",
+   "mandatory_depends_on": "eval:['Deposit to Bank','Mark as Cleared','Mark as Returned'].includes(doc.movement_type)",
    "options": "Account"
   },
   {
@@ -236,11 +236,11 @@
    "options": "Supplier"
   },
   {
-   "depends_on": "eval:['Mark as Returned','Return','Return to Customer','Cancel','Cancel Cheque'].includes(doc.movement_type)",
+   "depends_on": "eval:['Mark as Returned','Cancel'].includes(doc.movement_type)",
    "fieldname": "reason",
    "fieldtype": "Small Text",
    "label": "Reason",
-   "mandatory_depends_on": "eval:['Mark as Returned','Return','Return to Customer','Cancel','Cancel Cheque'].includes(doc.movement_type)"
+   "mandatory_depends_on": "eval:['Mark as Returned','Cancel'].includes(doc.movement_type)"
   },
   {
    "fieldname": "journal_entry",

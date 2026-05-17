@@ -7,7 +7,9 @@ app_license = "MIT"
 
 required_apps = ["erpnext"]
 
-# Future fixtures can be added here for custom fields, workflows, roles,
-# reports, and print formats after they are created through Frappe.
-fixtures = []
+fixtures = [
+    # Export the Cheque Management workspace so it is installed automatically
+    # on new sites and restored on migrate without manual UI setup.
+    {"dt": "Workspace", "filters": [["name", "in", ["Cheque Management"]]]},
+]
 
