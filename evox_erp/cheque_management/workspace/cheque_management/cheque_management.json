@@ -75,7 +75,7 @@
    "type": "Report"
   }
  ],
- "modified": "2026-05-14 00:00:00.000000",
+ "modified": "2026-05-17 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Cheque Management",
  "name": "Cheque Management",
@@ -142,5 +142,6 @@
    "type": "Report"
   }
  ],
- "title": "Cheque Management"
+ "title": "Cheque Management",
+ "type": "Workspace"
 }
