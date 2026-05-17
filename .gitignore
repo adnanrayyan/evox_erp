@@ -7,3 +7,20 @@ dist/
 build/
 node_modules/
 
+# ERPNext / Frappe site files — never commit these
+sites/*/site_config.json
+sites/*/private/
+sites/*/public/files/
+sites/*/private/files/
+
+# Logs
+logs/*
+
+# Python environment
+env/
+.env
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+

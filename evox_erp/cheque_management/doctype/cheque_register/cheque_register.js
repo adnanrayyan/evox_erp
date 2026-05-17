@@ -20,7 +20,6 @@ frappe.ui.form.on("Cheque Register", {
 		if (chequeType === "Incoming" && status === "Received / In Hand") {
 			add_action(frm, "Deposit to Bank", "deposit_to_bank", deposit_fields(frm));
 			add_action(frm, "Endorse to Supplier", "endorse_to_supplier", supplier_fields());
-			add_action(frm, "Return to Customer", "return_to_customer", reason_fields());
 			add_action(frm, "Cancel Cheque", "cancel_cheque", reason_fields());
 		}
 
@@ -29,8 +28,13 @@ frappe.ui.form.on("Cheque Register", {
 			add_action(frm, "Mark as Returned", "mark_as_returned", bank_reason_fields(frm));
 		}
 
+		if (chequeType === "Incoming" && status === "Endorsed to Supplier") {
+			add_action(frm, "Mark as Returned", "mark_as_returned", bank_reason_fields(frm));
+			add_action(frm, "Cancel Cheque", "cancel_cheque", reason_fields());
+		}
+
 		if (chequeType === "Incoming" && status === "Returned") {
-			add_action(frm, "Return to Customer", "return_to_customer", reason_fields());
+			add_action(frm, "Return to Customer", "return_to_customer", posting_fields());
 			add_action(frm, "Cancel Cheque", "cancel_cheque", reason_fields());
 		}
 
