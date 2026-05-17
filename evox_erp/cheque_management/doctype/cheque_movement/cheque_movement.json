@@ -7,24 +7,24 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "movement_section",
-  "company",
-  "cheque",
-  "movement_type",
-  "from_status",
-  "to_status",
-  "posting_date",
   "cheque_summary_section",
   "cheque_number",
   "current_status",
   "bank_name",
   "bank_branch",
   "due_date",
-  "amount",
   "currency",
   "party_section",
   "party_type",
   "party",
+  "movement_section",
+  "movement_type",
+  "from_status",
+  "to_status",
+  "posting_date",
+  "amount",
+  "company",
+  "cheque",
   "exchange_section",
   "company_currency",
   "original_exchange_rate",
@@ -42,58 +42,6 @@
  ],
  "fields": [
   {
-   "fieldname": "movement_section",
-   "fieldtype": "Section Break",
-   "label": "Movement"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Company",
-   "options": "Company",
-   "read_only": 1,
-   "reqd": 1
-  },
-  {
-   "fieldname": "cheque",
-   "fieldtype": "Link",
-   "in_global_search": 1,
-   "in_list_view": 1,
-   "label": "Cheque",
-   "options": "Cheque Register",
-   "reqd": 1
-  },
-  {
-   "fieldname": "movement_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Movement Type",
-   "options": "Deposit to Bank\nMark as Cleared\nMark as Returned\nEndorse to Supplier\nCancel",
-   "reqd": 1
-  },
-  {
-   "fieldname": "from_status",
-   "fieldtype": "Data",
-   "label": "From Status",
-   "read_only": 1
-  },
-  {
-   "fieldname": "to_status",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "To Status",
-   "read_only": 1
-  },
-  {
-   "default": "Today",
-   "fieldname": "posting_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Posting Date",
-   "reqd": 1
-  },
-  {
    "fieldname": "cheque_summary_section",
    "fieldtype": "Section Break",
    "label": "Cheque Summary"
@@ -101,6 +49,7 @@
   {
    "fieldname": "cheque_number",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Cheque No",
    "read_only": 1
   },
@@ -129,15 +78,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "amount",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Amount",
-   "options": "currency",
-   "read_only": 1,
-   "reqd": 1
-  },
-  {
    "fieldname": "currency",
    "fieldtype": "Link",
    "label": "Currency",
@@ -159,9 +99,70 @@
   {
    "fieldname": "party",
    "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
    "label": "Party",
    "options": "party_type",
    "read_only": 1
+  },
+  {
+   "fieldname": "movement_section",
+   "fieldtype": "Section Break",
+   "label": "Movement"
+  },
+  {
+   "fieldname": "movement_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Movement Type",
+   "options": "Deposit to Bank\nMark as Cleared\nMark as Returned\nEndorse to Supplier\nReturn to Customer\nCancel",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_status",
+   "fieldtype": "Data",
+   "label": "From Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "To Status",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "cheque",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "label": "Cheque",
+   "options": "Cheque Register",
+   "reqd": 1
   },
   {
    "fieldname": "exchange_section",
@@ -301,9 +302,10 @@
    "write": 1
   }
  ],
- "search_fields": "cheque,cheque_number,movement_type,from_status,to_status",
+ "search_fields": "cheque_number,cheque,movement_type,from_status,to_status,party",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
+ "title_field": "cheque_number",
  "track_changes": 1
 }
