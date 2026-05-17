@@ -1,1 +1,2 @@
 evox_erp.patches.v1_0.normalize_movement_types
+evox_erp.patches.v1_0.fix_cheque_management_workspace
