@@ -1,7 +1,7 @@
 {
  "app": "evox_erp",
  "charts": [],
- "content": "[{\"id\":\"cheque-shortcuts\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Cheque Management</span>\",\"col\":12}},{\"id\":\"cheque-register\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Register\",\"col\":3}},{\"id\":\"cheque-movement\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Movement\",\"col\":3}},{\"id\":\"cheque-settings\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Settings\",\"col\":3}},{\"id\":\"cheque-reports\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Reports</span>\",\"col\":12}},{\"id\":\"cheques-in-hand\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheques In Hand\",\"col\":3}},{\"id\":\"cheques-under-collection\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheques Under Collection\",\"col\":3}},{\"id\":\"returned-cheques\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Returned Cheques\",\"col\":3}}]",
+ "content": "[{\"id\":\"cheque-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Cheque Management</span>\",\"col\":12}},{\"id\":\"sc-cheque-register\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Register\",\"col\":3}},{\"id\":\"sc-cheque-movement\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Movement\",\"col\":3}},{\"id\":\"sc-cheque-settings\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Settings\",\"col\":3}}]",
  "creation": "2026-05-14 00:00:00.000000",
  "custom_blocks": [],
  "docstatus": 0,
@@ -22,7 +22,7 @@
    "link_to": "Cheque Register",
    "link_type": "DocType",
    "onboard": 0,
-   "type": "DocType"
+   "type": "Link"
   },
   {
    "hidden": 0,
@@ -32,7 +32,7 @@
    "link_to": "Cheque Movement",
    "link_type": "DocType",
    "onboard": 0,
-   "type": "DocType"
+   "type": "Link"
   },
   {
    "hidden": 0,
@@ -42,37 +42,7 @@
    "link_to": "Cheque Settings",
    "link_type": "DocType",
    "onboard": 0,
-   "type": "DocType"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Cheques In Hand",
-   "link_count": 0,
-   "link_to": "Cheques In Hand",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Report"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Cheques Under Collection",
-   "link_count": 0,
-   "link_to": "Cheques Under Collection",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Report"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Returned Cheques",
-   "link_count": 0,
-   "link_to": "Returned Cheques",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Report"
+   "type": "Link"
   }
  ],
  "modified": "2026-05-17 00:00:00.000000",
@@ -107,39 +77,12 @@
   },
   {
    "color": "Grey",
-   "doc_view": "Form",
+   "doc_view": "List",
    "format": "{}",
    "label": "Cheque Settings",
    "link_to": "Cheque Settings",
    "stats_filter": "[]",
    "type": "DocType"
-  },
-  {
-   "color": "Green",
-   "doc_view": "Report",
-   "format": "{}",
-   "label": "Cheques In Hand",
-   "link_to": "Cheques In Hand",
-   "stats_filter": "[]",
-   "type": "Report"
-  },
-  {
-   "color": "Orange",
-   "doc_view": "Report",
-   "format": "{}",
-   "label": "Cheques Under Collection",
-   "link_to": "Cheques Under Collection",
-   "stats_filter": "[]",
-   "type": "Report"
-  },
-  {
-   "color": "Red",
-   "doc_view": "Report",
-   "format": "{}",
-   "label": "Returned Cheques",
-   "link_to": "Returned Cheques",
-   "stats_filter": "[]",
-   "type": "Report"
   }
  ],
  "title": "Cheque Management",
