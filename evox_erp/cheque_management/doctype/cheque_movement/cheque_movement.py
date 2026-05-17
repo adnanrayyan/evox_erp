@@ -177,12 +177,10 @@ class ChequeMovement(Document):
         elif movement_type == "Mark as Returned":
             cheque.return_date = self.posting_date
             cheque.return_reason = self.reason
-        elif movement_type == "Return to Customer":
-            cheque.return_date = self.posting_date
-            cheque.return_reason = self.reason
         elif movement_type == "Endorse to Supplier":
             cheque.endorsed_to_supplier = self.supplier
             cheque.endorsed_date = self.posting_date
+        # "Return to Customer" is a physical/admin handback; only status is updated above.
 
         cheque.save(ignore_permissions=True)
         cheque.add_comment(
@@ -239,7 +237,7 @@ class ChequeMovement(Document):
         elif movement_type == "Mark as Cleared":
             if str(cheque.clearance_date or "") == str(self.posting_date or ""):
                 cheque.clearance_date = None
-        elif movement_type in ("Mark as Returned", "Return to Customer"):
+        elif movement_type == "Mark as Returned":
             if str(cheque.return_date or "") == str(self.posting_date or ""):
                 cheque.return_date = None
             if cheque.return_reason == self.reason:

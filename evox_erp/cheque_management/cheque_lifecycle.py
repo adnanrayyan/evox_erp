@@ -24,8 +24,6 @@ MOVEMENT_TYPE_ALIASES = {
     "Collected": "Mark as Cleared",
     "Return": "Mark as Returned",
     "Bounce": "Mark as Returned",
-    # "Return to Customer" was a legacy movement type; normalise to Mark as Returned
-    "Return to Customer": "Mark as Returned",
     "Cancel Cheque": "Cancel",
 }
 
@@ -40,7 +38,12 @@ VALID_TRANSITIONS = {
         ("Deposited / Under Collection", "Mark as Returned"): "Returned",
         # Allow cancellation while cheque is still under collection
         ("Deposited / Under Collection", "Cancel"): "Cancelled",
+        # Endorsed cheque returned by the supplier reverts to Returned
+        ("Endorsed to Supplier", "Mark as Returned"): "Returned",
+        ("Endorsed to Supplier", "Cancel"): "Cancelled",
         ("Returned", "Cancel"): "Cancelled",
+        # Physical handback of a returned cheque to the original customer
+        ("Returned", "Return to Customer"): "Returned to Customer",
     },
     "Outgoing": {
         ("Issued", "Mark as Cleared"): "Cleared",
