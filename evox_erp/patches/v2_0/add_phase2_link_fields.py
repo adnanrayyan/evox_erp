@@ -24,6 +24,9 @@ def _backfill_current_movement():
     set current_movement to the most recent submitted movement.
     This is idempotent — safe to run multiple times.
     """
+    if not frappe.db.has_column("Cheque Register", "current_movement"):
+        return
+
     cheques_with_movements = frappe.db.sql("""
         SELECT DISTINCT cheque
         FROM `tabCheque Movement`
