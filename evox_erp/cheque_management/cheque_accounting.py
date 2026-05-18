@@ -198,8 +198,8 @@ def make_journal_entry(company, posting_date, accounts, remarks,
     je.user_remark = remarks or ""
 
     if ref_doctype and ref_name:
-        # multi_currency flag is set automatically by Frappe based on entries
-        je.cheque_no = ref_name  # informational; not a mandatory field
+        je.cheque_no = ref_name
+        je.cheque_date = posting_date
 
     for row in accounts:
         entry = {
