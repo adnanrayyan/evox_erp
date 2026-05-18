@@ -260,13 +260,6 @@ def make_payment_entry(company, posting_date, payment_type, party_type, party,
     if remarks:
         pe.remarks = remarks
 
-    if ref_doctype and ref_name:
-        pe.append("references", {
-            "reference_doctype": ref_doctype,
-            "reference_name": ref_name,
-            "allocated_amount": flt(paid_amount),
-        })
-
     pe.insert(ignore_permissions=True)
     pe.submit()
     return pe
