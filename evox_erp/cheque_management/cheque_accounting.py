@@ -217,9 +217,6 @@ def make_journal_entry(company, posting_date, accounts, remarks,
             entry["account_currency"] = row["account_currency"]
         if row.get("cost_center"):
             entry["cost_center"] = row["cost_center"]
-        if ref_doctype and ref_name:
-            entry["reference_type"] = ref_doctype
-            entry["reference_name"] = ref_name
 
         je.append("accounts", entry)
 
