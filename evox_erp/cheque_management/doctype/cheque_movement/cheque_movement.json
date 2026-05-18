@@ -38,6 +38,13 @@
   "supplier",
   "reason",
   "journal_entry",
+  "from_account",
+  "to_account",
+  "accounting_posted",
+  "source_section",
+  "customer_receipt",
+  "supplier_payment",
+  "company_cheque_issue",
   "notes"
  ],
  "fields": [
@@ -249,6 +256,53 @@
    "fieldtype": "Link",
    "label": "Journal Entry",
    "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_account",
+   "fieldtype": "Link",
+   "label": "From Account",
+   "options": "Account",
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_account",
+   "fieldtype": "Link",
+   "label": "To Account",
+   "options": "Account",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "accounting_posted",
+   "fieldtype": "Check",
+   "label": "Accounting Posted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_section",
+   "fieldtype": "Section Break",
+   "label": "Source Document"
+  },
+  {
+   "fieldname": "customer_receipt",
+   "fieldtype": "Link",
+   "label": "Customer Receipt",
+   "options": "Cheque Customer Receipt",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supplier_payment",
+   "fieldtype": "Link",
+   "label": "Supplier Payment",
+   "options": "Cheque Supplier Payment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company_cheque_issue",
+   "fieldtype": "Link",
+   "label": "Company Cheque Issue",
+   "options": "Company Cheque Issue",
    "read_only": 1
   },
   {

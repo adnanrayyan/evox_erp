@@ -1,7 +1,7 @@
 {
  "app": "evox_erp",
  "charts": [],
- "content": "[{\"id\":\"cheque-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Cheque Management</span>\",\"col\":12}},{\"id\":\"sc-cheque-register\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Register\",\"col\":3}},{\"id\":\"sc-cheque-movement\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Movement\",\"col\":3}},{\"id\":\"sc-cheque-settings\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Settings\",\"col\":3}}]",
+ "content": "[{\"id\":\"cheque-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Cheque Management</span>\",\"col\":12}},{\"id\":\"sc-cheque-customer-receipt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Customer Receipt\",\"col\":3}},{\"id\":\"sc-cheque-supplier-payment\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Supplier Payment\",\"col\":3}},{\"id\":\"sc-company-cheque-issue\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company Cheque Issue\",\"col\":3}},{\"id\":\"sc-cheque-register\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Register\",\"col\":3}},{\"id\":\"sc-cheque-movement\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Movement\",\"col\":3}},{\"id\":\"sc-cheque-settings\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cheque Settings\",\"col\":3}}]",
  "creation": "2026-05-14 00:00:00.000000",
  "custom_blocks": [],
  "docstatus": 0,
@@ -14,6 +14,36 @@
  "is_hidden": 0,
  "label": "Cheque Management",
  "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Cheque Customer Receipt",
+   "link_count": 0,
+   "link_to": "Cheque Customer Receipt",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Cheque Supplier Payment",
+   "link_count": 0,
+   "link_to": "Cheque Supplier Payment",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Company Cheque Issue",
+   "link_count": 0,
+   "link_to": "Company Cheque Issue",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
   {
    "hidden": 0,
    "is_query_report": 0,
@@ -45,7 +75,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-05-17 00:00:00.000000",
+ "modified": "2026-05-18 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Cheque Management",
  "name": "Cheque Management",
@@ -57,6 +87,33 @@
  "roles": [],
  "sequence_id": 1.0,
  "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Cheque Customer Receipt",
+   "link_to": "Cheque Customer Receipt",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Cheque Supplier Payment",
+   "link_to": "Cheque Supplier Payment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Company Cheque Issue",
+   "link_to": "Company Cheque Issue",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
   {
    "color": "Green",
    "doc_view": "List",

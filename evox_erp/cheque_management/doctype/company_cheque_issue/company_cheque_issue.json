@@ -1,0 +1,229 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "CCI-.YYYY.-.#####",
+ "creation": "2026-05-18 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "basic_section",
+  "company",
+  "posting_date",
+  "party_type",
+  "party",
+  "party_account",
+  "column_break_basic",
+  "cheque_number",
+  "bank_account",
+  "due_date",
+  "currency",
+  "exchange_rate",
+  "amount",
+  "base_amount",
+  "status",
+  "amended_from",
+  "accounting_section",
+  "cheque_register",
+  "journal_entry",
+  "remarks_section",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "basic_section",
+   "fieldtype": "Section Break",
+   "label": "Cheque Details"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "party_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Party Type",
+   "options": "Supplier\nCustomer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Party",
+   "options": "party_type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "party_account",
+   "fieldtype": "Link",
+   "label": "Party Account",
+   "options": "Account",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_basic",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cheque_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Cheque Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank_account",
+   "fieldtype": "Link",
+   "label": "Bank Account",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Due / Cheque Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "base_amount",
+   "fieldtype": "Currency",
+   "label": "Base Amount",
+   "read_only": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nIssued\nCleared\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Company Cheque Issue",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "accounting_section",
+   "fieldtype": "Section Break",
+   "label": "Accounting"
+  },
+  {
+   "fieldname": "cheque_register",
+   "fieldtype": "Link",
+   "label": "Cheque Register",
+   "options": "Cheque Register",
+   "read_only": 1
+  },
+  {
+   "fieldname": "journal_entry",
+   "fieldtype": "Link",
+   "label": "Issuance Journal Entry",
+   "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks_section",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-05-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Cheque Management",
+ "name": "Company Cheque Issue",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "cheque_number,party,party_type,status",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "cheque_number",
+ "track_changes": 1
+}

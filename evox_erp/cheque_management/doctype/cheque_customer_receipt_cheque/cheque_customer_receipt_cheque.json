@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "creation": "2026-05-18 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "cheque_no",
+  "bank",
+  "branch",
+  "due_date",
+  "amount",
+  "currency",
+  "exchange_rate",
+  "base_amount",
+  "column_break_1",
+  "cheque_register",
+  "journal_entry",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "cheque_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Cheque No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Bank",
+   "reqd": 1
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "label": "Branch"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Due Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate"
+  },
+  {
+   "fieldname": "base_amount",
+   "fieldtype": "Currency",
+   "label": "Base Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cheque_register",
+   "fieldtype": "Link",
+   "label": "Cheque Register",
+   "options": "Cheque Register",
+   "read_only": 1
+  },
+  {
+   "fieldname": "journal_entry",
+   "fieldtype": "Link",
+   "label": "Journal Entry",
+   "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Cheque Management",
+ "name": "Cheque Customer Receipt Cheque",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

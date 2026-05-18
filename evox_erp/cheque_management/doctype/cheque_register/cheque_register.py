@@ -54,6 +54,10 @@ class ChequeRegister(Document):
         )
 
     def before_cancel(self):
+        # allow_direct_cancel is set programmatically by Customer Receipt and Company
+        # Cheque Issue cancel flows — do not set this flag from user-facing code.
+        if self.flags.get("allow_direct_cancel"):
+            return
         frappe.throw(_("Use the Cancel Cheque action so the lifecycle change is recorded as a Cheque Movement."))
 
     def set_default_status(self):
@@ -291,8 +295,7 @@ def _create_movement(
     movement.insert()
     movement.submit()
 
-    # TODO: Phase 2 will optionally create a draft Journal Entry for this movement.
-    return {"status": movement.to_status, "movement": movement.name}
+    return {"status": movement.to_status, "movement": movement.name, "journal_entry": movement.journal_entry}
 
 
 @frappe.whitelist()
